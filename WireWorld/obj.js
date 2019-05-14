@@ -1,20 +1,19 @@
 class Rect{
-	constructor(x, y, ground){
+	constructor(x, y, state){
 		Objs.push(this);
 		this.x = x;
 		this.y = y;
 
 		this.size = tile_size;
 
-		this.ground = ground;
-
-		this.bground = background_colors[this.ground]
-
+		this.state = state;
+		this.color = states[state];
+		
 	}
 
 	draw(){
 		ctx.beginPath();
-		ctx.fillStyle = this.bground;
+		ctx.fillStyle = this.color;
 		ctx.rect(this.x, this.y, this.size, this.size);
 		ctx.fill();
 	}
@@ -24,44 +23,6 @@ class Rect{
 	}
 }
 
-class Survivor{
-	constructor(x, y){
-
-	}
-	draw(){
-
-	}
-	update(){
-
-	}
-}
-
-class Fire_place{
-	constructor(x, y){
-		Objs.push(this);
-		this.x = x;
-		this.y = y;
-
-		this.radius = 20;
-		this.heat_radius = 60;
-
-		this.length = 30;
-
-		this.color = "#FF2B08"
-
-	}
-
-	draw(){
-		ctx.beginPath();
-		ctx.arc(this.x, this.y, this.radius, 0, 2 * Math.PI);
-		ctx.fillStyle = this.color
-		ctx.fill();
-	}
-
-	update(){
-		
-	}
-}
 
 class Camera{
 	constructor(){

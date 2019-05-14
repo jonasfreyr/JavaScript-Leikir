@@ -3,10 +3,10 @@ let camera_speed = 10;
 let camera_width = 896;
 let camera_height = 896;
 
-let world_width = 30;
-let world_height = 30;
+let world_width = 1000;
+let world_height = 1000;
 
-let tile_size = 64;
+let tile_size = 16;
 
 let world_widthP = world_width * tile_size;
 let world_heightP = world_height * tile_size;
@@ -16,7 +16,6 @@ let ctx = c.getContext("2d");
 
 let Objs = [];
 
-let world_background = '#000132';
-let background_colors = {"Sand": "#FFE600", "Ocean": "#1053FF", "Grass": "#357B00"};
-let ground = ["Ocean", "Sand"];
-let chances = {"Sand": 20, "Ocean": 20};
+let world_background = '#000000';
+let states = {"None": "#000000", "Unactivated": "#F3F138", "Head": "#0B44DE", "Tail": "#F51100"};
+let states_list = ["None", "Unactivated", "Head", "Tail"];

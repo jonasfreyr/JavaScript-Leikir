@@ -10,10 +10,7 @@ window.addEventListener('keyup',function(e){
     keyState[e.keyCode || e.which] = false;
 },true);
 
-function choose(choices) {
-  let index = Math.floor(Math.random() * choices.length);
-  return choices[index];
-}
+
 
 class Game{
 	constructor(){
@@ -46,11 +43,18 @@ class Game{
 		this.camera.translate();
 
 		//this.draw_grid();
-
-		Objs.forEach(function(obj){
-			obj.draw();
-		});
-
+		console.log(this.camera)
+		for(let obj of Objs){
+			if (obj.x < -this.camera.x + camera_width &&
+			   obj.x + obj.size > -this.camera.x &&
+			   obj.y < -this.camera.y + camera_height &&
+			   obj.y + obj.size > -this.camera.y) {
+			    // collision detected!
+				obj.draw();
+			}
+			//obj.draw()
+			
+		}
 
 		ctx.restore();
 	}
@@ -93,32 +97,16 @@ function randint(min, max) {
 	return Math.floor(Math.random() * max) + min;
 }
 
+function choose(choices) {
+  let index = Math.floor(Math.random() * choices.length);
+  return choices[index];
+}
+
 function make_map() {
 	let x = 0;
 	let y = 0;
-	let num, rect;
-	let counter = 0;
-	let ground_nums = {};
-	for(let j of ground){
-		ground_nums[j] = [counter, counter + chances[j]]
-
-		counter = counter + chances[j]
-	}
-
 	for (let i = 0; i < (world_width * world_height); i++) {
-		num = randint(0, 100);
-		rect = false;
-		for(let j of ground){
-			if (num >= ground_nums[j][0] && num <= ground_nums[j][1]) {
-				new Rect(x * tile_size, y * tile_size, j);
-				rect = true;
-			}
-			
-		}
-
-		if (!rect) {
-			new Rect(x * tile_size, y * tile_size, "Grass");
-		}
+		new Rect(x * tile_size, y * tile_size, choose(states_list));
 
 		x += 1;
 
@@ -126,7 +114,7 @@ function make_map() {
 			x = 0;
 			y += 1;
 		}
-	}
+}
 }
 let now = new Date();
 let last = now;
@@ -140,7 +128,7 @@ function loop(){
 	fps = 1000 / (now - last);
 	last = now
 
-	console.log(fps)
+	// console.log(fps)
 
 	if (!game.pause){
 		game.event();
@@ -152,7 +140,6 @@ function loop(){
 
 function New() {
 	make_map();
-	new Fire_place(30, 30);
 }
 
 New();

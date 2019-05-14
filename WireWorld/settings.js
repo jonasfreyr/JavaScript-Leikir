@@ -1,4 +1,5 @@
 //Camera
+let zoom_speed = 0.01
 let camera_speed = 10;
 let camera_width = 896;
 let camera_height = 896;
@@ -17,5 +18,5 @@ let ctx = c.getContext("2d");
 let Objs = [];
 
 let world_background = '#000000';
-let states = {"None": "#000000", "Unactivated": "#F3F138", "Head": "#0B44DE", "Tail": "#F51100"};
+let states = {"None": "#C5DBCD", "Unactivated": "#F3F138", "Head": "#0B44DE", "Tail": "#F51100"};
 let states_list = ["None", "Unactivated", "Head", "Tail"];

@@ -1,11 +1,18 @@
 <!DOCTYPE html>
-<html style="text-align: center;">
+<html>
 <head>
 	<title>WireWorld</title>
 	<meta charset="utf-8">
 </head>
 <body>
-	<canvas id="c" style="border: 1px black solid" onmousedown="Mouse.show_coords(event)"></canvas>
+	<canvas id="c" style="border: 1px black solid" onmousemove="game.show_coords(event)" onmousedown="game.mousedown(event)" onmouseup="game.mouseup()"></canvas>
+	<button onclick="game.starting()">Start!</button>
+	<button onclick="game.stop()">Stop!</button>
+	<button onclick="game.blue()">Blue</button>
+	<button onclick="game.yellow()">Yellow</button>
+	<p>Delay</p>
+	<input type="range" min="1" max="1000" value="500" id="slider">
+	<p id="output">500</p>
 </body>
 <script type="text/javascript" src="settings.js"></script>
 <script type="text/javascript" src="obj.js"></script>

@@ -10,10 +10,107 @@ window.addEventListener('keyup',function(e){
     keyState[e.keyCode || e.which] = false;
 },true);
 
+slider.oninput = function(){
+	speed = this.value;
+	output.innerHTML = this.value;
+}
+
 class Game{
 	constructor(){
 		this.pause = false;
 		this.camera = new Camera();
+		this.mouse = false;
+		this.del = false;
+		this.start = false;
+		this.state = "Unactivated";
+
+		//this.camera.x = -world_widthP / 2;
+		//this.camera.y = -world_heightP / 2;
+	}
+
+	blue(){
+		this.state = "Head";
+	}
+
+	yellow(){
+		this.state = "Unactivated";
+	}
+
+	starting(){
+		this.start = true;
+	}
+
+	stop(){
+		this.start = false;
+	}
+
+	mousedown(event){
+		this.mouse = true;
+
+		if (event.button == 0){
+			this.del = false;
+		}
+
+		else if(event.button == 1){
+			this.del = true;
+		}
+
+		this.show_coords(event)
+	}
+
+	mouseup(){
+		this.mouse = false;
+		this.del = false;
+	}
+
+	show_coords(event){
+		let rect = c.getBoundingClientRect();
+		let x = event.clientX - rect.left;
+		let y = event.clientY - rect.top;
+		
+		// console.table([x, y, this.camera.x, this.camera.y])
+		let new_x = (x / (this.camera.zoomed) - (this.camera.x ));
+		let new_y = (y / (this.camera.zoomed) - (this.camera.y ));
+
+		// console.log(new_x);
+		// console.log(new_y);
+
+		if (this.mouse) {
+			x = 0;
+			let rect_x;
+			let rect_y;
+			let index;
+			let make_rect = false;
+			for (let i = 0; i < (world_width); i++) {
+				y = 0;
+				for (let j = 0; j < (world_height); j++) {
+					if (new_x >= x && new_x <= x + tile_size && new_y >= y && new_y <= y + tile_size) {
+						rect_x = x;
+						rect_y = y;
+						make_rect = true;
+						index = 0;
+						for (let obj of Objs){
+							if(obj.x == x && obj.y == y){
+								if (this.del){
+									Objs.splice(index, 1)
+								}
+								make_rect = false;
+								break;
+							}
+							index++
+						}
+						break;						
+					}
+					y += tile_size;
+				}
+				x += tile_size;
+			}
+			if (make_rect && !this.del){
+				new Rect(rect_x, rect_y, this.state)
+			}
+			// console.log(Objs.length);
+		}
+		
 	}
 
 	draw_grid(){
@@ -53,8 +150,6 @@ class Game{
 			    // collision detected!
 				obj.draw();
 			}
-			//obj.draw()
-			
 		}
 
 		this.draw_grid();
@@ -97,14 +192,35 @@ class Game{
 	}
 
 	update(){
-		//this.camera.move(4000, 30);
-		// console.log(this.camera);
-		
+		if (this.start){
+			let tails = []
+			let heads = []
+			for (let obj of Objs){
+				if (obj.state == "Head"){
+					heads.push(obj);
+				}
+				else if (obj.state == "Tail"){
+					tails.push(obj);
+				}
+			}
+			for (let obj of heads){
+				obj.update();
+			}
+
+			for (let obj of tails){
+				obj.update();
+			}
+
+			if (tails.length == 0 && heads.length == 0){
+				this.start = false;
+			}
+			
+		}
 	}
 }
 
 let game = new Game();
-let mouse = new Mouse();
+
 function randint(min, max) {
 	return Math.floor(Math.random() * max) + min;
 }
@@ -118,7 +234,7 @@ function make_map() {
 	let x = 0;
 	let y = 0;
 	for (let i = 0; i < (world_width * world_height); i++) {
-		new Rect(x * tile_size, y * tile_size, "None");
+		// new Rect(x * tile_size, y * tile_size, "None");
 
 		x += 1;
 
@@ -135,24 +251,19 @@ let fps;
 function loop(){
 	game.draw();
 
-	now = new Date()
-
-	fps = 1000 / (now - last);
-	last = now
-
-	// console.log(fps)
-
 	if (!game.pause){
 		game.event();
-		game.update();
+		now = new Date();
+		if (now - last > speed) {
+			last = now;
+			game.update();
+		}
+		
+		
 	}
 
 	requestAnimationFrame(loop);
 }
 
-function New() {
-	make_map();
-}
 
-New();
 loop();

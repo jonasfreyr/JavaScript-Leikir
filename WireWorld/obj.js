@@ -19,23 +19,23 @@ class Rect{
 	}
 
 	update(){
-
+		if (this.state == "Head") {
+			for (let obj of Objs){
+				if ((obj.x == this.x - tile_size || obj.x == this.x + tile_size || obj.x == this.x) && (obj.y == this.y - tile_size || obj.y == this.y + tile_size || obj.y == this.y)) {
+					if (obj.state == "Unactivated") {
+						obj.state = "Head";
+						obj.color = states[obj.state]
+					}
+				}
+			}
+			this.state = "Tail";
+			this.color = states[this.state]
+		}
+		else if (this.state == "Tail"){
+			this.state = "Unactivated";
+			this.color = states[this.state]
+		}
 	}
-}
-
-class Mouse{
-	constructor(){
-		this.x = null;
-		this.y = null;
-	}
-	
-	show_coords(event){
-	let rect = c.getBoundingClientRect();
-	this.x = event.clientX - rect.left;
-	this.y = event.clientY - rect.top;
-	console.log(this.x);
-	console.log(this.y);
-}
 }
 
 class Camera{
@@ -52,9 +52,9 @@ class Camera{
 	}
 
 	zoom(){
-		//if (this.zoomed < 1){
-		//	this.zoomed = 1;
-		//}
+		if (this.zoomed < 0.1){
+			this.zoomed = 0.1;
+		}
 		ctx.scale(this.zoomed, this.zoomed)
 	}
 

@@ -17,7 +17,6 @@ slider.oninput = function(){
 
 class Game{
 	constructor(){
-		this.pause = false;
 		this.camera = new Camera();
 		this.mouse = false;
 		this.del = false;
@@ -130,6 +129,23 @@ class Game{
 		ctx.stroke();
 	}
 
+	draw_text(){
+		let text;
+		ctx.textAlign = "left";
+		ctx.fillStyle = "rgba(127, 127, 127, 0.6)";
+
+		ctx.font = "20px Arial";
+		if (this.starting){
+			text = "Running"
+		}
+
+		else{
+			text = "Paused"
+		}
+
+		ctx.fillText(text, 5, 20);
+	}
+
 	draw(){
 		ctx.fillStyle = world_background;
 		ctx.fillRect(0, 0, camera_width, camera_height);
@@ -155,6 +171,8 @@ class Game{
 		this.draw_grid();
 
 		ctx.restore();
+
+		this.draw_text();
 	}
 
 	event(){
@@ -207,6 +225,15 @@ class Game{
 				obj.update();
 			}
 
+			for (let obj of Objs){
+				console.log(obj.count);
+				if (obj.count > 0 && obj.count < 3) {
+					obj.state = "Head";
+					obj.color = states[obj.state]
+				}
+				obj.count = 0;
+			}
+
 			for (let obj of tails){
 				obj.update();
 			}
@@ -250,18 +277,12 @@ let fps;
 
 function loop(){
 	game.draw();
-
-	if (!game.pause){
-		game.event();
-		now = new Date();
-		if (now - last > speed) {
-			last = now;
-			game.update();
-		}
-		
-		
+	game.event();
+	now = new Date();
+	if (now - last > speed) {
+		last = now;
+		game.update();
 	}
-
 	requestAnimationFrame(loop);
 }
 

@@ -8,6 +8,8 @@ class Rect{
 
 		this.state = state;
 		this.color = states[state];
+
+		this.count = 0;
 		
 	}
 
@@ -21,13 +23,13 @@ class Rect{
 	update(){
 		if (this.state == "Head") {
 			for (let obj of Objs){
-				if ((obj.x == this.x - tile_size || obj.x == this.x + tile_size || obj.x == this.x) && (obj.y == this.y - tile_size || obj.y == this.y + tile_size || obj.y == this.y)) {
-					if (obj.state == "Unactivated") {
-						obj.state = "Head";
-						obj.color = states[obj.state]
+				if (obj.state == "Unactivated") {
+					if ((obj.x == this.x - tile_size || obj.x == this.x + tile_size || obj.x == this.x) && (obj.y == this.y - tile_size || obj.y == this.y + tile_size || obj.y == this.y)) {
+						obj.count = obj.count + 1;
 					}
 				}
 			}
+
 			this.state = "Tail";
 			this.color = states[this.state]
 		}

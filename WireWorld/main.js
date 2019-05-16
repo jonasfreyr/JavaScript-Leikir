@@ -135,7 +135,7 @@ class Game{
 		ctx.fillStyle = "rgba(127, 127, 127, 0.6)";
 
 		ctx.font = "20px Arial";
-		if (this.starting){
+		if (this.start){
 			text = "Running"
 		}
 

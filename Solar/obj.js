@@ -61,3 +61,30 @@ class Planet{
 		}
 	}
 }
+
+class Camera{
+	constructor(){
+		this.x = 0;
+		this.y = 0;
+
+		this.zoomed = 1;
+	}
+
+	translate(){
+		ctx.translate(this.x, this.y);
+		
+	}
+
+	zoom(){
+		if (this.zoomed < 0.1){
+			this.zoomed = 0.1;
+		}
+		ctx.scale(this.zoomed, this.zoomed)
+	}
+
+	move(x, y){
+		this.x = x + camera_width / 2;
+		this.y = y + camera_height / 2;
+	}
+
+}

@@ -1,17 +1,21 @@
 class Planet{
 	constructor(x, y, r, color, fixed=false){
 		Objs.push(this);
-		this.pos = new Vector(x, y)
+		this.pos = new Vector(x, y);
 
-		this.r = r
+		this.r = r;
 
 		this.fixed = fixed;
 
-		this.mass = r
+		this.mass = r;
 		this.color = color;
 
 		this.vel = new Vector(0, 0);
 		this.acceleration = new Vector(0, 0)
+
+		this.focused = false;
+
+		this.trail = [];
 	}
 
 	draw(){
@@ -21,8 +25,39 @@ class Planet{
 		ctx.fill();
 	}
 
+	draw_trail(){
+		ctx.beginPath();
+		if (white) {
+			ctx.strokeStyle = "black";
+		}
+
+		else{
+			ctx.strokeStyle = "white";
+		}
+
+		let prev = null;
+		let curr;
+
+		// console.log(this.trail)
+		for (let trail of this.trail){
+			curr = trail;
+			if (prev != null) {
+				ctx.moveTo(prev.x, prev.y);
+				ctx.lineTo(curr.x, curr.y);
+
+			}
+			prev = curr;
+		}
+		ctx.stroke();
+	}
+
 	updateForce(){
 		if (!this.fixed){
+			this.trail.push(this.pos);
+			if (this.trail.length > 1000) {
+				this.trail.shift();
+			}
+
 			this.vel.applyForce(this.acceleration);
 			this.pos.applyForce(this.vel);
 		}
